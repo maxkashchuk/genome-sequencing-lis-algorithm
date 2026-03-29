@@ -1,1 +1,1 @@
-# genome-sequencing-lis-algorithm
+# Genome sequencing Longest Increasing Subsequence algorithm
