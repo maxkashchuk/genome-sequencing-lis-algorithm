@@ -5,6 +5,8 @@
 
 #include "main.h"
 
+#include <typeinfo>
+
 uint32_t arguments_parser(int argc, char* argv[])
 {
     using namespace Main;
@@ -49,6 +51,12 @@ int main(int argc, char* argv[]) {
     if (-1 == result) {
         return 0;
     }
+
+    std::vector<std::unique_ptr<Main::Sequence>> s = bioparser::Parser<Main::Sequence>::Create<bioparser::FastaParser>(Main::fasta_data_path)->Parse(-1);
+
+    std::cout << "Name: " << s[1]->name << "\n";
+    std::cout << "Sequence: " << s[1]->data << "\n";
+    std::cout << "Length of sequence: " << s.size() << "\n";
 
     return 0;
 }
