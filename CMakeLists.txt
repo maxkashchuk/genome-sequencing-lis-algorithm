@@ -6,7 +6,7 @@ project(fasta_lis_sequencing VERSION 3.1.0
 
 add_subdirectory(bioparser)
 
-add_executable(fasta_lis_sequencing src/main.cpp)
+add_executable(fasta_lis_sequencing src/main.cpp src/alignment.cpp)
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${PROJECT_SOURCE_DIR}/include")
 

@@ -5,17 +5,19 @@
 #include "bioparser/fasta_parser.hpp"
 
 namespace Main {
-    const std::string fasta_data_path = "dataset/MAP006-1_2D_pass.fasta";
+    const std::string fasta_data_path_1 = "dataset/MAP006-1_2D_pass.fasta";
     
+    const std::string fasta_data_path_2 = "dataset/MAP006-2_2D_pass.fasta";
+
     int opt;
     
-    int match_score = 0;
-    int mismatch_penalty = 0;
-    int gap_penalty = 0;
+    int match_score = -2;
+    int mismatch_penalty = -1;
+    int gap_penalty = -2;
     int k_mer_size = 3;
     int window_size = 3;
 
-    std::string alignment_type = "";
+    std::string alignment_type = "global";
 
     struct Sequence {
         public:
