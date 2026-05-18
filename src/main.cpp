@@ -19,12 +19,6 @@ int main(int argc, char* argv[]) {
     std::vector<std::unique_ptr<Main::Sequence>> s_1 = bioparser::Parser<Main::Sequence>::Create<bioparser::FastaParser>(Main::fasta_data_path_1)->Parse(-1);
 
     std::vector<std::unique_ptr<Main::Sequence>> s_2 = bioparser::Parser<Main::Sequence>::Create<bioparser::FastaParser>(Main::fasta_data_path_2)->Parse(-1);
-    
-    // Uncomment the line below to print the first sequence's name and data
-    // Main::print_sequence(*s[0]);
-
-    // std::string query = "GCATGCAT";
-    // std::string target = "TTTGCATGCATTTT";
 
     team_name::AlignmentType type_enum;
     if (Main::alignment_type == "global") {
@@ -38,26 +32,12 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    //TODO
-
-    // std::string query = "";
-    // std::string target = "";
-
-    // for (auto& seq_ptr : s_1) {
-    //     query += seq_ptr->data;
-    // }
-
-    // for (auto& seq_ptr : s_2) {
-    //     target += seq_ptr->data;
-    // }
-
     std::string cigar = "";
     unsigned int target_begin = 0;
 
     std::string query = s_1[0]->data;
     std::string target = s_2[0]->data;
 
-    // Invocazione della libreria
     int score = team_name::Align(
         query.c_str(), query.length(),
         target.c_str(), target.length(),
@@ -69,18 +49,21 @@ int main(int argc, char* argv[]) {
         &target_begin
     );
 
-    std::cout << "--- Risultati dell'Allineamento ---\n";
-    std::cout << "Tipologia  : " << Main::alignment_type << "\n";
+    std::cout << "--- Alignment Results ---\n";
+    std::cout << "Type       : " << Main::alignment_type << "\n";
     std::cout << "Score      : " << score << "\n";
     std::cout << "Target Pos : " << target_begin << "\n";
     std::cout << "CIGAR      : " << cigar << "\n";
 
-    //TODO
+    MinimizerManager minimizer_1;
+    std::vector<Minimizer> minimizers_1 = minimizer_1.find_minimizers(s_1, Main::k_mer_size, Main::window_size);
 
-    // MinimizerManager minimizer;
-    // std::vector<Minimizer> minimizers = minimizer.find_minimizers(s, Main::k_mer_size, Main::window_size);
+    std::cout << "Found first sequence " << minimizers_1.size() << " minimizers.\n";
 
-    // std::cout << "Found " << minimizers.size() << " minimizers.\n";
+    MinimizerManager minimizer_2;
+    std::vector<Minimizer> minimizers_2 = minimizer_2.find_minimizers(s_2, Main::k_mer_size, Main::window_size);
+
+    std::cout << "Found second sequence " << minimizers_2.size() << " minimizers.\n";
 
     return 0;
 }
