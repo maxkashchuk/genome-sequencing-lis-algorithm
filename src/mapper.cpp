@@ -37,7 +37,7 @@ std::vector<Match> Mapper::find_matches(const std::vector<Minimizer>& query_mini
 std::vector<Match> Mapper::filter_matches_lis(std::vector<Match>& matches) {
     if (matches.empty()) return {};
 
-    size_t n = matches.size();
+    int n = matches.size();
     std::vector<int> tails; // Array storing the optimal target positions (LI)
     std::vector<int> parent(n, -1);
     std::vector<int> tails_indices; // Indices of the matches stored in 'tails'
