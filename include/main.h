@@ -2,22 +2,30 @@
 #define MAIN
 
 #include <cstdint>
+#include <string>
+#include <vector>
+#include <memory>
+#include <iostream>
+#include <unistd.h> 
+#include <cstdlib>  
 #include "bioparser/fasta_parser.hpp"
 
 namespace Main {
-    const std::string fasta_data_path_1 = "dataset/MAP006-1_2D_pass.fasta";
-    
-    const std::string fasta_data_path_2 = "dataset/MAP006-2_2D_pass.fasta";
+    const std::string fasta_data_path_1 = "dataset/MAP006-2_2D_pass.fasta";
+    const std::string fasta_data_path_2 = "dataset/MAP006-1_2D_pass.fasta";
 
-    int opt;
+    inline int opt;
     
-    int match_score = -2;
-    int mismatch_penalty = -1;
-    int gap_penalty = -2;
-    int k_mer_size = 3;
-    int window_size = 3;
+    // Alignment parameters
+    inline int match_score = -2;
+    inline int mismatch_penalty = -1;
+    inline int gap_penalty = -2;
+    inline std::string alignment_type = "global";
 
-    std::string alignment_type = "global";
+    // Minimizer parameters with standard default values
+    inline int k_mer_size = 15;
+    inline int window_size = 5;
+    inline double frequency_threshold = 0.001;
 
     struct Sequence {
         public:
@@ -31,20 +39,16 @@ namespace Main {
                 }
     };
 
-    uint32_t arguments_parser(int argc, char* argv[])
+    inline int arguments_parser(int argc, char* argv[])
     {
-        using namespace Main;
-
-        // The third parameter "a:m:n:g:" defines which flags to look for.
-        // The colon (:) indicates that the preceding flag requires an associated value (e.g., -m 5)
-        
-        while ((opt = getopt(argc, argv, "a:m:n:g:")) != -1) {
+        // The string "a:m:n:g:k:w:f:" specifies to getopt which flags require an associated argument
+        while ((opt = getopt(argc, argv, "a:m:n:g:k:w:f:")) != -1) {
             switch (opt) {
                 case 'a':
-                    alignment_type = optarg; // optarg is a global variable containing the text following the flag
+                    alignment_type = optarg;
                     break;
                 case 'm':
-                    match_score = std::atoi(optarg); // Converts the text string into an integer
+                    match_score = std::atoi(optarg);
                     break;
                 case 'n':
                     mismatch_penalty = std::atoi(optarg);
@@ -55,42 +59,45 @@ namespace Main {
                 case 'k':
                     k_mer_size = std::atoi(optarg);
                     if (k_mer_size > 32) {
-                        std::cerr << "Error. Maximum k-mer size is 32\n";
+                        std::cerr << "Error. The maximum allowed k-mer size is 32.\n";
                         return -1;
                     }
                     break;
                 case 'w':
                     window_size = std::atoi(optarg);
                     break;
+                case 'f':
+                    frequency_threshold = std::atof(optarg);
+                    if (frequency_threshold < 0.0 || frequency_threshold > 1.0) {
+                        std::cerr << "Error. The frequency threshold must be between 0.0 and 1.0.\n";
+                        return -1;
+                    }
+                    break;
                 default:
-                    std::cerr << "Error. Correct usage: " << argv[0] << " -a <type> -m <match> -n <mismatch> -g <gap>\n";
-                    return -1; // Terminates the program with an error code
+                    std::cerr << "Usage: " << argv[0] 
+                              << " -a <type> -m <match> -n <mismatch> -g <gap> -k <kmer> -w <window> -f <freq>\n";
+                    return -1;
             }
         }
-
-        return 1; // Indicates successful parsing of arguments
+        return 1;
     }
 
-    void print_arguments() {
-        using namespace Main;
-        std::cout << "Alignment Type: " << alignment_type << "\n";
-        std::cout << "Match Score: " << match_score << "\n";
-        std::cout << "Mismatch Penalty: " << mismatch_penalty << "\n";
-        std::cout << "Gap Penalty: " << gap_penalty << "\n";
-        std::cout << "K-mer size: " << k_mer_size << "\n";
-        std::cout << "Window size: " << window_size << "\n";
+    inline void print_arguments() {
+        std::cout << "--- Configuration Parameters ---\n";
+        std::cout << "Alignment Type   : " << alignment_type << "\n";
+        std::cout << "Match Score      : " << match_score << "\n";
+        std::cout << "Mismatch Penalty : " << mismatch_penalty << "\n";
+        std::cout << "Gap Penalty      : " << gap_penalty << "\n";
+        std::cout << "K-mer Size       : " << k_mer_size << "\n";
+        std::cout << "Window Size      : " << window_size << "\n";
+        std::cout << "Frequency Thresh.: " << frequency_threshold << "\n";
+        std::cout << "--------------------------------\n";
     }
 
-    void print_sequence(const Main::Sequence& seq) {
+    inline void print_sequence(const Main::Sequence& seq) {
         std::cout << "Name: " << seq.name << "\n";
-        std::cout << "Sequence: " << seq.data << "\n";
-        std::cout << "Length of sequence: " << seq.data.size() << "\n";
-    }
-
-    // Srquence to binary template function (to be implemented)
-    static void sequence_to_binary(std::vector<std::unique_ptr<Sequence>>& seq) {
-        return;
+        std::cout << "Sequence length: " << seq.data.size() << "\n";
     }
 }
 
-#endif
+#endif // MAIN
