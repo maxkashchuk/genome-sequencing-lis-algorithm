@@ -40,13 +40,12 @@ def main():
     print(f"Common aligned reads         : {len(common_reads)}")
 
     good_matches = 0
-    tolerance = 100 # Допустима похибка в координатах (у нуклеотидах)
+    tolerance = 100
 
     for read in common_reads:
         m1 = my_aln[read]
         m2 = mini_aln[read]
         
-        # Перевіряємо, чи збігаються координати на референсі
         if (m1['t_name'] == m2['t_name'] and 
             abs(m1['t_start'] - m2['t_start']) <= tolerance and 
             abs(m1['t_end'] - m2['t_end']) <= tolerance):
