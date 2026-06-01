@@ -1,5 +1,7 @@
 # Genome sequencing Longest Increasing Subsequence algorithm
 
+Place .fasta data in the dataset directory
+
 Program build:
 
 ```cmake
