@@ -5,7 +5,7 @@ Place ```.fasta``` data in the dataset directory.
 Program build:
 
 ```cmake
-mkdir -p build && cmake .. && make
+mkdir -p build && cd build && cmake .. && make
 ```
 
 Place ```fasta_lis_sequencing``` executable on the same level with dataset directory.
