@@ -166,6 +166,6 @@ int Align(
     }
 
     return final_score;
-}
+  }
 
 } // namespace SequenceAlignment
