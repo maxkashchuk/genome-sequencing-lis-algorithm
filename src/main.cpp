@@ -12,13 +12,13 @@
 
 int main(int argc, char* argv[]) {
 
-    // Parse command-line arguments
+    // 1. Parse command-line arguments
     uint32_t result = Main::arguments_parser(argc, argv);
     if (-1 == result) {
         return 0;
     }
 
-    // Load FASTA files into memory using bioparser
+    // 2. Load FASTA files into memory using bioparser
     std::vector<std::unique_ptr<Main::Sequence>> ref_seqs = 
         bioparser::Parser<Main::Sequence>::Create<bioparser::FastaParser>(Main::fasta_data_path_1)->Parse(-1);
 
@@ -30,14 +30,14 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Map the alignment type
-    team_name::AlignmentType type_enum;
+    // 3. Map the alignment type
+    SequenceAlignment::AlignmentType type_enum;
     if (Main::alignment_type == "global") {
-        type_enum = team_name::AlignmentType::Global;
+        type_enum = SequenceAlignment::AlignmentType::Global;
     } else if (Main::alignment_type == "local") {
-        type_enum = team_name::AlignmentType::Local;
+        type_enum = SequenceAlignment::AlignmentType::Local;
     } else if (Main::alignment_type == "semi-global") {
-        type_enum = team_name::AlignmentType::SemiGlobal;
+        type_enum = SequenceAlignment::AlignmentType::SemiGlobal;
     } else {
         std::cerr << "Error: Invalid alignment type. Use global, local, or semi-global.\n";
         return 1;
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
 
     std::vector<Minimizer> ref_minimizers = minimizer_mgr.find_minimizers(single_ref, Main::k_mer_size, Main::window_size);
 
-    // Build the Mapper index
+    // 5. Build the Mapper index
     Mapper mapper;
     std::cout << "[2/4] Building the hash index...\n";
     mapper.build_index(ref_minimizers, Main::frequency_threshold);
@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
             continue;
         }
 
-        // Aligning reads
+        // --- Step 7 & 8 (Aligning reads) ---
         std::string full_query = current_query_vec[0]->data;
         std::string full_target = single_ref[0]->data;
 
@@ -94,14 +94,14 @@ int main(int argc, char* argv[]) {
         std::string cigar = "";
         unsigned int target_align_begin = 0;
 
-        int score = team_name::Align(
+        int score = SequenceAlignment::Align(
             query_region.c_str(), query_region.length(),
             target_region.c_str(), target_region.length(),
             type_enum, Main::match_score, Main::mismatch_penalty, Main::gap_penalty,
             &cigar, &target_align_begin
         );
 
-        // Output PAF line for this specific read
+        // 9. Output PAF line for this specific read
         std::cout << current_query_vec[0]->name << "\t"        
                   << full_query.length() << "\t"        
                   << q_begin << "\t"                    
