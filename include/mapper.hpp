@@ -33,14 +33,14 @@ private:
 public:
     Mapper() = default;
 
-    // 1. Builds the index starting from the reference minimizers.
+    // Builds the index starting from the reference minimizers.
     // The frequency threshold parameter 'f' is used to identify and discard highly repetitive minimizers.
     void build_index(const std::vector<Minimizer>& ref_minimizers, double f = 0.001);
 
-    // 2. Queries the index to find all raw matches for the given sequence fragment.
+    // Queries the index to find all raw matches for the given sequence fragment.
     std::vector<Match> find_matches(const std::vector<Minimizer>& query_minimizers);
 
-    // 3. Core algorithm: applies the Longest Increasing Subsequence (LIS) in O(n log n) time.
+    // Core algorithm: applies the Longest Increasing Subsequence (LIS) in O(n log n) time.
     // Returns the filtered and sorted collinear chain representing the candidate region for alignment.
     std::vector<Match> filter_matches_lis(std::vector<Match>& matches);
 };
