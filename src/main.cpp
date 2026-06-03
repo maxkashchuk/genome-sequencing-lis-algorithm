@@ -12,13 +12,13 @@
 
 int main(int argc, char* argv[]) {
 
-    // 1. Parse command-line arguments
+    // Parse command-line arguments
     uint32_t result = Main::arguments_parser(argc, argv);
     if (-1 == result) {
         return 0;
     }
 
-    // 2. Load FASTA files into memory using bioparser
+    // Load FASTA files into memory using bioparser
     std::vector<std::unique_ptr<Main::Sequence>> ref_seqs = 
         bioparser::Parser<Main::Sequence>::Create<bioparser::FastaParser>(Main::fasta_data_path_1)->Parse(-1);
 
@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // 3. Map the alignment type
+    // Map the alignment type
     SequenceAlignment::AlignmentType type_enum;
     if (Main::alignment_type == "global") {
         type_enum = SequenceAlignment::AlignmentType::Global;
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
 
     std::vector<Minimizer> ref_minimizers = minimizer_mgr.find_minimizers(single_ref, Main::k_mer_size, Main::window_size);
 
-    // 5. Build the Mapper index
+    // Build the Mapper index
     Mapper mapper;
     std::cout << "[2/4] Building the hash index...\n";
     mapper.build_index(ref_minimizers, Main::frequency_threshold);
@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
             continue;
         }
 
-        // --- Step 7 & 8 (Aligning reads) ---
+        // Aligning reads
         std::string full_query = current_query_vec[0]->data;
         std::string full_target = single_ref[0]->data;
 
@@ -101,7 +101,7 @@ int main(int argc, char* argv[]) {
             &cigar, &target_align_begin
         );
 
-        // 9. Output PAF line for this specific read
+        // Output PAF line for this specific read
         std::cout << current_query_vec[0]->name << "\t"        
                   << full_query.length() << "\t"        
                   << q_begin << "\t"                    
