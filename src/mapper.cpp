@@ -2,7 +2,7 @@
 #include <iostream>
 #include <algorithm>
 
-// 1. Build the reference index
+// Build the reference index
 void Mapper::build_index(const std::vector<Minimizer>& ref_minimizers, double f) {
     // Calculate frequencies to filter out overly abundant minimizers
     std::unordered_map<uint64_t, int> counts;
@@ -18,7 +18,7 @@ void Mapper::build_index(const std::vector<Minimizer>& ref_minimizers, double f)
     }
 }
 
-// 2. Find matches between the query and the reference
+// Find matches between the query and the reference
 std::vector<Match> Mapper::find_matches(const std::vector<Minimizer>& query_minimizers) {
     std::vector<Match> matches;
     for (const auto& qm : query_minimizers) {
@@ -33,7 +33,7 @@ std::vector<Match> Mapper::find_matches(const std::vector<Minimizer>& query_mini
     return matches;
 }
 
-// 3. LIS (Longest Increasing Subsequence) Algorithm in O(n log n)
+// LIS (Longest Increasing Subsequence) Algorithm in O(n log n)
 std::vector<Match> Mapper::filter_matches_lis(std::vector<Match>& matches) {
     if (matches.empty()) return {};
 
