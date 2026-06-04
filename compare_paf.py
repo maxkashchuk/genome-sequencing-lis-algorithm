@@ -7,6 +7,10 @@ def parse_paf(filename):
             parts = line.strip().split('\t')
             if len(parts) < 11:
                 continue
+
+            strand = parts[4]
+            if strand == '-':
+                continue
             
             q_name = parts[0]
             q_start, q_end = int(parts[2]), int(parts[3])
@@ -23,8 +27,8 @@ def parse_paf(filename):
     return alignments
 
 def main():
-    my_paf = "./paf_results/alignments.paf"
-    mini_paf = "./paf_results/minimap2_single.paf"
+    my_paf = "./paf_results_new/alignments.paf"
+    mini_paf = "./paf_results_new/minimap2_align.paf"
 
     print(f"Loading {my_paf}...")
     my_aln = parse_paf(my_paf)

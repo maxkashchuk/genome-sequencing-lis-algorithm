@@ -11,8 +11,8 @@
 #include "bioparser/fasta_parser.hpp"
 
 namespace Main {
-    const std::string fasta_data_path_1 = "dataset/MAP006-2_2D_pass.fasta";
-    const std::string fasta_data_path_2 = "dataset/MAP006-1_2D_pass.fasta";
+    const std::string reference_data_path_1 = "dataset/GCF_000005845.2_ASM584v2_genomic.fna";
+    const std::string query_data_path_2 = "dataset/MAP006-1_2D_pass.fasta";
 
     inline int opt;
     

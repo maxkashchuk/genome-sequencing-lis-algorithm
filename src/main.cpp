@@ -20,10 +20,10 @@ int main(int argc, char* argv[]) {
 
     // Load FASTA files into memory using bioparser
     std::vector<std::unique_ptr<Main::Sequence>> ref_seqs = 
-        bioparser::Parser<Main::Sequence>::Create<bioparser::FastaParser>(Main::fasta_data_path_1)->Parse(-1);
+        bioparser::Parser<Main::Sequence>::Create<bioparser::FastaParser>(Main::reference_data_path_1)->Parse(-1);
 
     std::vector<std::unique_ptr<Main::Sequence>> query_seqs = 
-        bioparser::Parser<Main::Sequence>::Create<bioparser::FastaParser>(Main::fasta_data_path_2)->Parse(-1);
+        bioparser::Parser<Main::Sequence>::Create<bioparser::FastaParser>(Main::query_data_path_2)->Parse(-1);
 
     if (ref_seqs.empty() || query_seqs.empty()) {
         std::cerr << "Error: Unable to load sequences from the provided files.\n";
